@@ -1,0 +1,317 @@
+:root {
+    --tlo: #fafafa;
+    --karta: #ffffff;
+    --tekst: #1a1a1a;
+    --szary: #6b7280;
+    --linia: #e5e7eb;
+    --akcent: #2563eb;
+    --dobra: #16a34a;
+    --zla: #dc2626;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --tlo: #111113;
+        --karta: #1a1a1d;
+        --tekst: #f3f4f6;
+        --szary: #9ca3af;
+        --linia: #2d2d31;
+        --akcent: #60a5fa;
+        --dobra: #4ade80;
+        --zla: #f87171;
+    }
+}
+
+* { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+body {
+    margin: 0;
+    background: var(--tlo);
+    color: var(--tekst);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.5;
+}
+
+main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+}
+
+h1 { font-size: 28px; margin: 0 0 4px; }
+h2 { font-size: 20px; font-weight: 600; margin: 8px 0 20px; }
+h3 { font-size: 16px; margin: 0 0 12px; }
+
+.szary { color: var(--szary); margin: 0; }
+
+.naglowek {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.sekcja-gora {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.etykieta {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--szary);
+}
+
+.sekcja-gora .etykieta { margin: 0; }
+
+label { color: var(--szary); }
+
+input[type="number"],
+input[type="search"] {
+    width: 100%;
+    padding: 10px 12px;
+    font: inherit;
+    color: var(--tekst);
+    background: var(--karta);
+    border: 1px solid var(--linia);
+    border-radius: 8px;
+}
+
+input[type="number"]:focus,
+input[type="search"]:focus {
+    outline: none;
+    border-color: var(--akcent);
+}
+
+input[type="search"] { margin-bottom: 12px; }
+
+.pola {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.pola label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
+}
+
+.tryby {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+    margin-bottom: 28px;
+}
+
+.tryb {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px;
+    color: var(--tekst);
+    background: var(--karta);
+    border: 1px solid var(--linia);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.tryb input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.tryb strong { font-weight: 600; }
+.tryb span { font-size: 13px; color: var(--szary); }
+
+.tryb:has(input:checked) {
+    border-color: var(--akcent);
+    box-shadow: 0 0 0 1px var(--akcent);
+}
+
+.tryb:has(input:focus-visible) { outline: 2px solid var(--akcent); outline-offset: 2px; }
+
+button {
+    font: inherit;
+    cursor: pointer;
+    color: var(--tekst);
+    background: var(--karta);
+    border: 1px solid var(--linia);
+    border-radius: 8px;
+    padding: 10px 18px;
+}
+
+button:hover { border-color: var(--akcent); }
+
+button.glowny {
+    background: var(--akcent);
+    border-color: var(--akcent);
+    color: #fff;
+}
+
+button.maly {
+    padding: 6px 12px;
+    font-size: 14px;
+}
+
+button.duzy {
+    display: block;
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 16px;
+}
+
+button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+button.aktywny {
+    border-color: var(--akcent);
+    box-shadow: 0 0 0 1px var(--akcent);
+}
+
+.przyciski {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px;
+    margin: 16px 0;
+}
+
+.pasek {
+    height: 4px;
+    background: var(--linia);
+    border-radius: 2px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+#postep {
+    height: 100%;
+    width: 0;
+    background: var(--akcent);
+    transition: width 0.2s;
+}
+
+.gora {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    color: var(--szary);
+}
+
+#licznik { flex: 1; }
+
+#czas {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--tekst);
+}
+
+#czas.malo { color: var(--zla); }
+
+#pauzaInfo {
+    text-align: center;
+    padding: 60px 0;
+    color: var(--szary);
+}
+
+#odpowiedzi { margin-bottom: 20px; }
+
+.opcja {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 8px;
+    padding: 12px 16px;
+}
+
+.opcja.wybrana {
+    border-color: var(--akcent);
+    box-shadow: 0 0 0 1px var(--akcent);
+}
+
+.opcja.dobra { border-color: var(--dobra); color: var(--dobra); box-shadow: 0 0 0 1px var(--dobra); }
+.opcja.zla { border-color: var(--zla); color: var(--zla); box-shadow: 0 0 0 1px var(--zla); }
+.opcja.zablokowana { pointer-events: none; }
+
+#info { margin: 0 0 16px; font-weight: 600; }
+#info.dobra { color: var(--dobra); }
+#info.zla { color: var(--zla); }
+
+img {
+    display: block;
+    max-width: 100%;
+    margin: 0 0 20px;
+    border-radius: 8px;
+    border: 1px solid var(--linia);
+    background: #fff;
+}
+
+.podsumowanie {
+    text-align: center;
+    padding: 32px 16px;
+    background: var(--karta);
+    border: 1px solid var(--linia);
+    border-radius: 8px;
+}
+
+.werdykt {
+    margin: 0 0 4px;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.werdykt.zdane { color: var(--dobra); }
+.werdykt.niezdane { color: var(--zla); }
+
+.duze { font-size: 56px; font-weight: 700; line-height: 1.1; margin: 8px 0; }
+
+.podsumowanie .szary + .szary { margin-top: 8px; }
+
+#przeglad { margin: 24px 0; }
+
+.blok {
+    background: var(--karta);
+    border: 1px solid var(--linia);
+    border-left-width: 4px;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.blok.ok { border-left-color: var(--dobra); }
+.blok.blad { border-left-color: var(--zla); }
+.blok p.brak { margin: 0 0 8px; color: var(--zla); }
+
+.odp {
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    border: 1px solid var(--linia);
+    border-radius: 6px;
+}
+
+.odp.dobra { border-color: var(--dobra); color: var(--dobra); }
+.odp.zla { border-color: var(--zla); color: var(--zla); }
+
+.tag {
+    margin-left: 8px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+#liczbaWynikow { margin-bottom: 16px; }
+#wyniki { margin-bottom: 16px; }

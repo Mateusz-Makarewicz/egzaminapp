@@ -1,4 +1,17 @@
 :root {
+    color-scheme: dark;
+    --tlo: #111113;
+    --karta: #1a1a1d;
+    --tekst: #f3f4f6;
+    --szary: #9ca3af;
+    --linia: #2d2d31;
+    --akcent: #60a5fa;
+    --dobra: #4ade80;
+    --zla: #f87171;
+}
+
+:root[data-theme="light"] {
+    color-scheme: light;
     --tlo: #fafafa;
     --karta: #ffffff;
     --tekst: #1a1a1a;
@@ -7,19 +20,6 @@
     --akcent: #2563eb;
     --dobra: #16a34a;
     --zla: #dc2626;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --tlo: #111113;
-        --karta: #1a1a1d;
-        --tekst: #f3f4f6;
-        --szary: #9ca3af;
-        --linia: #2d2d31;
-        --akcent: #60a5fa;
-        --dobra: #4ade80;
-        --zla: #f87171;
-    }
 }
 
 * { box-sizing: border-box; }
@@ -37,7 +37,7 @@ body {
 main {
     max-width: 680px;
     margin: 0 auto;
-    padding: 40px 20px 60px;
+    padding: 24px 20px 60px;
 }
 
 h1 { font-size: 28px; margin: 0 0 4px; }
@@ -315,3 +315,43 @@ img {
 
 #liczbaWynikow { margin-bottom: 16px; }
 #wyniki { margin-bottom: 16px; }
+
+.motyw {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+}
+
+.gora { flex-wrap: wrap; }
+
+main img[src] { cursor: zoom-in; }
+
+#lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    overflow: auto;
+    padding: 56px 16px 16px;
+    background: rgba(0, 0, 0, 0.88);
+}
+
+#lightbox button {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+}
+
+#lightbox img {
+    margin: auto;
+    max-width: 100%;
+    max-height: calc(100vh - 72px);
+    object-fit: contain;
+    cursor: zoom-in;
+}
+
+#lightbox img.pelny {
+    max-width: none;
+    max-height: none;
+    cursor: zoom-out;
+}

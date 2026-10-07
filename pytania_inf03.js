@@ -1,11 +1,11 @@
 // Baza pytań do quizu.
-// id          - numer pytania w bazie
+// id          - numer pytania w źródle
 // pytanie     - treść pytania
 // odpowiedzi  - cztery odpowiedzi w kolejności A, B, C, D (bez liter)
 // poprawna    - litera poprawnej odpowiedzi
-// obraz       - opcjonalnie: nazwa pliku ze zdjęciem z folderu obrazki/
+// obraz       - opcjonalnie: nazwa pliku ze zdjęciem z folderu inf03/
 
-const BAZA_PYTAN = [
+const BAZA_INF03 = [
     {
         id: 1,
         pytanie: "Którego polecenia nalezy użyć, aby wyraz TEKST został wyświetleny w kolorze czarnym w oknie przeglądarki internetowej?",
@@ -11763,17 +11763,6 @@ const BAZA_PYTAN = [
         poprawna: "D"
     },
     {
-        id: 1039,
-        pytanie: "Która operacja, na dwóch obiektach, została zastosowana w programie do obróbki grafiki wektorowej?",
-        odpowiedzi: [
-            "różnica",
-            "wykluczenie",
-            "suma",
-            "podział"
-        ],
-        poprawna: "A"
-    },
-    {
         id: 1040,
         pytanie: "Która własności języka CSS umożliwia zmianę domyślnego koloru czcionki?",
         odpowiedzi: [
@@ -12051,17 +12040,6 @@ const BAZA_PYTAN = [
             "div { padding: 80px 200px 150px 100px; }"
         ],
         poprawna: "A"
-    },
-    {
-        id: 1065,
-        pytanie: "Którą wartość właściwości position przypisano do obrazu z napisem Lorem Ipsum na przedstawionym filmie?",
-        odpowiedzi: [
-            "absolute",
-            "static",
-            "fixed",
-            "relative"
-        ],
-        poprawna: "C"
     },
     {
         id: 1066,
@@ -12345,17 +12323,6 @@ const BAZA_PYTAN = [
         ],
         poprawna: "A",
         obraz: "1090.jpg"
-    },
-    {
-        id: 1091,
-        pytanie: "Efekt przedstawiony w filmie powinien być zdefiniowany w selektorze",
-        odpowiedzi: [
-            "tr { background-color: Pink; }",
-            "td, th { background-color: Pink; }",
-            "tr:hover { background-color: Pink; }",
-            "tr:active { background-color: Pink; }"
-        ],
-        poprawna: "C"
     },
     {
         id: 1092,
@@ -13023,17 +12990,6 @@ const BAZA_PYTAN = [
         poprawna: "B"
     },
     {
-        id: 1150,
-        pytanie: "Na filmie zaprezentowano algorytm sortowania",
-        odpowiedzi: [
-            "grzebieniowego.",
-            "przez scalanie.",
-            "przez wstawianie.",
-            "bąbelkowego."
-        ],
-        poprawna: "C"
-    },
-    {
         id: 1151,
         pytanie: "tr:nth-child(even) {background-color: #F2F2F2;} \nZastosowane formatowanie selektora tr spowoduje",
         odpowiedzi: [
@@ -13574,17 +13530,6 @@ const BAZA_PYTAN = [
             "stosowanie języka zapytań OQL."
         ],
         poprawna: "C"
-    },
-    {
-        id: 1199,
-        pytanie: "Przedstawiona w filmie czynność wykonana w systemie CMS Joomla! ma na celu",
-        odpowiedzi: [
-            "dodanie tłumaczenia na język angielski dla zmiennej językowej o nazwie SUNDAY.",
-            "definiowanie tłumaczenia całej witryny z języka angielskiego na język polski.",
-            "definiowanie pełnej wersji językowej szablonu dla języka polskiego, gdy szablon pierwotnie opracowano wyłącznie w języku angielskim.",
-            "dodanie tłumaczenia na język polski dla zmiennej językowej o nazwie SUNDAY."
-        ],
-        poprawna: "D"
     },
     {
         id: 1200,
@@ -14133,17 +14078,6 @@ const BAZA_PYTAN = [
         poprawna: "D"
     },
     {
-        id: 1248,
-        pytanie: "W przedstawionym filmie, aby połączyć tekst i wielokąt w jeden obiekt Nie, aby operacja ta była odwracalna zastosowano funkcję",
-        odpowiedzi: [
-            "grupowania.",
-            "sumy.",
-            "części wspólnej.",
-            "wykluczenia."
-        ],
-        poprawna: "A"
-    },
-    {
         id: 1249,
         pytanie: "Który związek selektorów CSS należy zastosować w miejscu znaków zapytania, aby zdefiniowany styl został zastosowany tylko na tekście \"paragrafie\"?",
         odpowiedzi: [
@@ -14370,17 +14304,6 @@ const BAZA_PYTAN = [
         ],
         poprawna: "C",
         obraz: "1268.jpg"
-    },
-    {
-        id: 1269,
-        pytanie: "Który efekt został zaprezentowany na filmie?",
-        odpowiedzi: [
-            "Zmiana jasności zdjęć.",
-            "Zwiększenie ostrości zdjęcia.",
-            "Przenikanie zdjęć.",
-            "Zmniejszenie kontrastu zdjęcia."
-        ],
-        poprawna: "C"
     },
     {
         id: 1270,

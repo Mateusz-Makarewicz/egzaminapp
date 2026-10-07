@@ -355,3 +355,18 @@ main img[src] { cursor: zoom-in; }
     max-height: none;
     cursor: zoom-out;
 }
+
+.motyw { gap: 8px; }
+
+button.ikona {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+}
+
+button.ikona svg { width: 18px; height: 18px; }
+
+.tryb:has(input:disabled) { opacity: 0.4; cursor: not-allowed; }

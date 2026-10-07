@@ -370,3 +370,15 @@ button.ikona {
 button.ikona svg { width: 18px; height: 18px; }
 
 .tryb:has(input:disabled) { opacity: 0.4; cursor: not-allowed; }
+
+.zakres {
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    margin-bottom: 16px;
+}
+
+.zakres .tryb {
+    align-items: center;
+    padding: 10px 12px;
+}
+
+.grupa { margin-top: 24px; }

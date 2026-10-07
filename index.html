@@ -107,9 +107,15 @@
 
 <section id="szukaj" hidden>
     <header class="naglowek">
-        <h1>Wyszukiwarka <span class="szary" id="szukajKwal"></span></h1>
+        <h1>Wyszukiwarka</h1>
         <button class="maly" id="btnWroc">← Wróć</button>
     </header>
+    <div class="tryby zakres">
+        <label class="tryb"><input type="radio" name="zakres" value="inf02"><strong>INF.02</strong></label>
+        <label class="tryb"><input type="radio" name="zakres" value="inf03"><strong>INF.03</strong></label>
+        <label class="tryb"><input type="radio" name="zakres" value="inf04"><strong>INF.04</strong></label>
+        <label class="tryb"><input type="radio" name="zakres" value="wszystkie"><strong>Wszystkie</strong></label>
+    </div>
     <input type="search" id="fraza" placeholder="Szukaj w pytaniach i odpowiedziach">
     <p class="szary" id="liczbaWynikow"></p>
     <div id="wyniki"></div>
@@ -127,8 +133,8 @@
 <script src="pytania_inf03.js"></script>
 <script src="pytania_inf04.js"></script>
 <script>
-let FOLDER_OBRAZKOW = "";
-let PYTANIA = [], INDEKS = [], kwal = "inf03";
+let PYTANIA = [], kwal = "inf03";
+let zakres = "inf03", widok = null, liczniki = {}, ostatniaGrupa = null;
 
 const KWALIFIKACJE = {
     inf02: {nazwa: "INF.02", baza: typeof BAZA_INF02 === "undefined" ? null : BAZA_INF02, folder: "inf02/"},
@@ -154,29 +160,32 @@ const PORCJA = 30;
 function normalizuj(t) {
     return t.toLowerCase().replace(/ł/g, "l").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
+const MAPOWANE = {}, INDEKSY = {};
+
+function dane(k) {
+    if (!MAPOWANE[k]) {
+        MAPOWANE[k] = KWALIFIKACJE[k].baza.map(p => ({
+            q: p.pytanie,
+            a: p.odpowiedzi,
+            c: "ABCD".indexOf(p.poprawna),
+            img: p.obraz,
+            k: k
+        }));
+        INDEKSY[k] = MAPOWANE[k].map(p => normalizuj(p.q + " " + p.a.join(" ")));
+    }
+    return MAPOWANE[k];
+}
+
 function ustawKwalifikacje(k) {
     const kw = KWALIFIKACJE[k];
     if (!kw || !kw.baza) return;
     kwal = k;
-    PYTANIA = kw.baza.map(p => ({
-        q: p.pytanie,
-        a: p.odpowiedzi,
-        c: "ABCD".indexOf(p.poprawna),
-        img: p.obraz
-    }));
-    INDEKS = PYTANIA.map(p => normalizuj(p.q + " " + p.a.join(" ")));
-    FOLDER_OBRAZKOW = kw.folder;
+    PYTANIA = dane(k);
     $("tytul").textContent = "Test " + kw.nazwa;
-    $("szukajKwal").textContent = kw.nazwa;
     $("baza").textContent = PYTANIA.length;
     $("liczba").max = PYTANIA.length;
     document.title = "Test " + kw.nazwa;
     document.querySelector('input[name="kwal"][value="' + k + '"]').checked = true;
-    $("fraza").value = "";
-    $("wyniki").innerHTML = "";
-    $("liczbaWynikow").textContent = "";
-    $("btnWiecej").hidden = true;
-    znalezione = [];
     try { localStorage.setItem("kwal", k); } catch (e) {}
 }
 
@@ -184,6 +193,7 @@ Object.keys(KWALIFIKACJE).forEach(k => {
     const radio = document.querySelector('input[name="kwal"][value="' + k + '"]');
     const baza = KWALIFIKACJE[k].baza;
     radio.disabled = !baza;
+    document.querySelector('input[name="zakres"][value="' + k + '"]').disabled = !baza;
     $("opis" + k[0].toUpperCase() + k.slice(1)).textContent = baza ? baza.length + " pytań" : "brak pliku";
     radio.onchange = () => ustawKwalifikacje(k);
 });
@@ -210,9 +220,10 @@ function losuj(n) {
 }
 
 function ustawObraz(el, p) {
+    const folder = KWALIFIKACJE[p.k].folder;
     if (p.img) {
-        el.alt = "Brak obrazka " + p.img + " w folderze " + FOLDER_OBRAZKOW;
-        el.src = FOLDER_OBRAZKOW + p.img;
+        el.alt = "Brak obrazka " + p.img + " w folderze " + folder;
+        el.src = folder + p.img;
         el.title = "Kliknij, aby powiększyć";
         el.hidden = false;
     } else {
@@ -391,10 +402,10 @@ function koniec(powod) {
     $("uwaga").hidden = uwaga === "";
 
     $("btnBledy").hidden = dobre === test.length;
-    $("btnBledy").classList.remove("aktywny");
-    $("btnWszystkie").classList.remove("aktywny");
     $("przeglad").hidden = true;
     $("przeglad").innerHTML = "";
+    widok = null;
+    odswiezPrzyciski();
     pokaz("wynik");
 }
 
@@ -444,8 +455,6 @@ function przeglad(tylkoBledy) {
         rysujPytanie(box, p, (i + 1) + ". ", odpowiedzi[i], ok ? "ok" : "blad");
     });
     box.hidden = false;
-    $("btnBledy").classList.toggle("aktywny", tylkoBledy);
-    $("btnWszystkie").classList.toggle("aktywny", !tylkoBledy);
 }
 
 function szukaj() {
@@ -454,11 +463,23 @@ function szukaj() {
     $("btnWiecej").hidden = true;
     znalezione = [];
     pokazane = 0;
+    ostatniaGrupa = null;
     if (slowa.length === 0) {
         $("liczbaWynikow").textContent = "Wpisz frazę, aby wyszukać.";
         return;
     }
-    znalezione = PYTANIA.filter((p, i) => slowa.every(s => INDEKS[i].includes(s)));
+    const klucze = zakres === "wszystkie" ? Object.keys(KWALIFIKACJE).filter(k => KWALIFIKACJE[k].baza) : [zakres];
+    liczniki = {};
+    klucze.forEach(k => {
+        const lista = dane(k);
+        liczniki[k] = 0;
+        lista.forEach((p, i) => {
+            if (slowa.every(s => INDEKSY[k][i].includes(s))) {
+                znalezione.push(p);
+                liczniki[k]++;
+            }
+        });
+    });
     $("liczbaWynikow").textContent = "Znaleziono pytań: " + znalezione.length;
     pokazWiecej();
 }
@@ -466,9 +487,40 @@ function szukaj() {
 function pokazWiecej() {
     const granica = Math.min(pokazane + PORCJA, znalezione.length);
     for (; pokazane < granica; pokazane++) {
-        rysujPytanie($("wyniki"), znalezione[pokazane], "", undefined, "");
+        const p = znalezione[pokazane];
+        if (zakres === "wszystkie" && p.k !== ostatniaGrupa) {
+            ostatniaGrupa = p.k;
+            dodaj($("wyniki"), "h3", KWALIFIKACJE[p.k].nazwa + " (" + liczniki[p.k] + ")", "etykieta grupa");
+        }
+        rysujPytanie($("wyniki"), p, "", undefined, "");
     }
     $("btnWiecej").hidden = pokazane >= znalezione.length;
+}
+
+function ustawZakres(z) {
+    zakres = z;
+    document.querySelector('input[name="zakres"][value="' + z + '"]').checked = true;
+    szukaj();
+}
+
+function odswiezPrzyciski() {
+    $("btnBledy").textContent = widok === "bledy" ? "Ukryj błędne odpowiedzi" : "Pokaż błędne odpowiedzi";
+    $("btnWszystkie").textContent = widok === "wszystkie" ? "Ukryj wszystkie pytania" : "Pokaż wszystkie pytania";
+    $("btnBledy").classList.toggle("aktywny", widok === "bledy");
+    $("btnWszystkie").classList.toggle("aktywny", widok === "wszystkie");
+}
+
+function przelaczPrzeglad(rodzaj) {
+    const box = $("przeglad");
+    if (widok === rodzaj) {
+        widok = null;
+        box.hidden = true;
+        box.innerHTML = "";
+    } else {
+        widok = rodzaj;
+        przeglad(rodzaj === "bledy");
+    }
+    odswiezPrzyciski();
 }
 
 document.querySelectorAll('input[name="tryb"]').forEach(r => r.onchange = odswiezPola);
@@ -477,10 +529,12 @@ $("btnStart").onclick = start;
 $("btnPreset").onclick = preset;
 $("btnDalej").onclick = dalej;
 $("btnPauza").onclick = przelaczPauze;
-$("btnBledy").onclick = () => przeglad(true);
-$("btnWszystkie").onclick = () => przeglad(false);
+$("btnBledy").onclick = () => przelaczPrzeglad("bledy");
+$("btnWszystkie").onclick = () => przelaczPrzeglad("wszystkie");
+document.querySelectorAll('input[name="zakres"]').forEach(r => r.onchange = () => ustawZakres(r.value));
 $("btnNowy").onclick = () => pokaz("start");
 $("btnSzukaj").onclick = () => {
+    ustawZakres(kwal);
     pokaz("szukaj");
     $("fraza").focus();
 };
